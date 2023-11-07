@@ -10,6 +10,9 @@ from fastapi.responses import JSONResponse
 import asyncio
 from lines import RANDOM_LINES
 import random
+from fastapi.middleware.cors import (
+    CORSMiddleware,
+)
 
 # Load environment variables
 dotenv.load_dotenv()
@@ -19,6 +22,17 @@ logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(
 
 # Initialize FastAPI app
 app = FastAPI()
+
+origins = ['*']
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+) 
+
 
 # Constants for configuration
 DISCORD_BOT_TOKEN = os.getenv("DISCORD_BOT_TOKEN")
