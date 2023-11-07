@@ -73,7 +73,9 @@ async def validate_discourse_signature(request: Request, body: bytes):
 @app.post("/discourse_webhook")
 async def discourse_webhook(request: Request):
     body = await request.body()
-    # if not await validate_discostus_code=status.HTTP_400_BAD_REQUEST, detail="Invalid signature")
+    if not await validate_discourse_signature(request, body):
+        logging.error("Invalid signature")
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Invalid signature")
 
     data = await request.json()
     if data.get("topic") and data["topic"].get("category_id") == 8:  # 'Lyra Request For Comment' category ID
